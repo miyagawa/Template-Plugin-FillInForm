@@ -1,5 +1,8 @@
 Revision history for Perl extension Template::Plugin::FillInForm
 
+0.04  Thu Nov 14 19:08:50 JST 2002
+	* Fixed memory leaks due to Template::Plugin::Filter
+
 0.03  Wed Sep 18 11:51:44 JST 2002
 	- Fixed test suite not fail regardless of hash ordering
 	  (Thanks to Randal L. Schwartz)

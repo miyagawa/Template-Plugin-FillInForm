@@ -2,30 +2,36 @@ package Template::Plugin::FillInForm;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = 0.03;
+$VERSION = 0.04;
 
-require Template::Plugin::Filter;
-use base qw(Template::Plugin::Filter);
+require Template::Plugin;
+use base qw(Template::Plugin);
 
-use vars qw($DYNAMIC $FILTER_NAME);
-$DYNAMIC = 1;
+use vars qw($FILTER_NAME);
 $FILTER_NAME = 'fillinform';
 
 use HTML::FillInForm;
 
-sub init {
-    my $self = shift;
-    my $name = $self->{_ARGS}->[0] || $FILTER_NAME;
-    $self->install_filter($name);
-    return $self;
+sub new {
+    my($class, $context, @args) = @_;
+    my $name = $args[0] || $FILTER_NAME;
+    $context->define_filter($name, $class->filter_factory());
+    bless {}, $class;
 }
 
-sub filter {
-    my($self, $text, $args, $config) = @_;
-    my $fif = HTML::FillInForm->new;
-    return $fif->fill(scalarref => \$text, %$config);
+sub filter_factory {
+    my $class = shift;
+    my $sub = sub {
+	my($context, @args) = @_;
+	my $config = ref $args[-1] eq 'HASH' ? pop(@args) : { };
+	return sub {
+	    my $text = shift;
+	    my $fif = HTML::FillInForm->new;
+	    return $fif->fill(scalarref => \$text, %$config);
+	};
+    };
+    return [ $sub, 1 ];
 }
-
 
 1;
 __END__
