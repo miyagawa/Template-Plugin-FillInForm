@@ -2,7 +2,7 @@ package Template::Plugin::FillInForm;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = 0.02;
+$VERSION = 0.03;
 
 require Template::Plugin::Filter;
 use base qw(Template::Plugin::Filter);
